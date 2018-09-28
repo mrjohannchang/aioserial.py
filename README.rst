@@ -7,22 +7,34 @@ Python asynchronous serial module for combining ``asyncio`` and ``pyserial``.
 Quick start
 ===========
 
-Constructor
------------
+AioSerial
+---------
 
 .. code:: py
 
     import aioserial
+    import serial
+
+    isinstance(aioserial.AioSerial(), serial.Serial)
+    True
+
+    issubclass(aioserial.AioSerial, serial.Serial)
+    True
+
+Constructor
+```````````
+
+.. code:: py
 
     aioserial_instance: aioserial.AioSerial = aioserial.AioSerial(
-        SAME_WITH_PYSERIAL...,
+        # ... same with what can be passed to serial.Serial ...,
         loop: Optional[asyncio.AbstractEventLoop] = None)
 
-Asynchronously Read
--------------------
+Methods
+```````
 
 read_async
-``````````
+::::::::::
 
 .. code:: py
 
@@ -30,28 +42,24 @@ read_async
         await aioserial_instance.read_async(size: int = 1)
 
 read_until_async
-````````````````
+::::::::::::::::
 
 .. code:: py
-
-    import serial
 
     at_most_certain_size_of_bytes_read: bytes = \
         await aioserial_instance.read_until_async(
             expected: bytes = serial.LF, size: Optional[int] = None)
 
 readinto_async
-``````````````
+::::::::::::::
 
 .. code:: py
-
-   import array
 
     number_of_byte_read: int = \
         await aioserial_instance.readinto_async(b: Union[array.array, bytearray])
 
 readline_async
-``````````````
+::::::::::::::
 
 .. code:: py
 
@@ -59,18 +67,15 @@ readline_async
         await aioserial_instance.readline_async(size: int = -1)
 
 readlines_async
-```````````````
+:::::::::::::::
 
 .. code:: py
 
     lines_of_at_most_certain_size_of_bytes_read: bytes = \
         await aioserial_instance.readlines_async(hint: int = -1)
 
-Asynchronously Write
---------------------
-
 write_async
-```````````
+:::::::::::
 
 .. code:: py
 
@@ -78,7 +83,7 @@ write_async
         await aioserial_instance.write_async(bytes_like_data)
 
 writelines_async
-````````````````
+::::::::::::::::
 
 .. code:: py
 
@@ -86,6 +91,6 @@ writelines_async
         await aioserial_instance.writelines_async(list_of_bytes_like_data)
 
 Other APIs
-----------
+``````````
 
-All the other APIs in `serial.Serial` are supported as original.
+All the other APIs in ``serial.Serial`` are supported in aioserial.AioSerial as original.
