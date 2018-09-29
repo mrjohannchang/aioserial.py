@@ -1,8 +1,3 @@
-from typing import List
+from serial import *
 
 from .aioserial import AioSerial
-
-
-__all__: List[str] = [
-    'AioSerial',
-]
