@@ -51,7 +51,7 @@ bytes_read: bytes = \
 ```py
 at_most_certain_size_of_bytes_read: bytes = \
     await aioserial_instance.read_until_async(
-        expected: bytes = serial.LF, size: Optional[int] = None)
+        expected: bytes = aioserial.LF, size: Optional[int] = None)
 ```
 
 ##### readinto_async
