@@ -4,7 +4,7 @@ A Python package that combines [asyncio](https://docs.python.org/3/library/async
 
 ## Quick start
 
-A simple serial port reader:
+### A simple serial port reader
 
 ```py
 import aioserial
