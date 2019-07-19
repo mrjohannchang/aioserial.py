@@ -7,3 +7,5 @@
 from serial import *
 
 from .aioserial import AioSerial
+
+protocol_handler_packages.append("aioserial")
