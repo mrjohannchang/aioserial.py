@@ -67,6 +67,11 @@ class _AioSerialMixin(serial.SerialBase):
         return await self.loop.run_in_executor(
             self._write_executor, self.writelines, lines)
 
+    def close(self) -> None:
+        self._read_executor.shutdown(wait=False)
+        self._write_executor.shutdown(wait=False)
+        super().close()
+
 
 class AioSerial(_AioSerialMixin, serial.Serial):
 
