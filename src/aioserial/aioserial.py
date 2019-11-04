@@ -61,34 +61,62 @@ class AioSerial(serial.Serial):
         self._loop = value
 
     async def read_async(self, size: int = 1) -> bytes:
-        return await self.loop.run_in_executor(
-            self._read_executor, self.read, size)
+        try:
+            return await self.loop.run_in_executor(
+                self._read_executor, self.read, size)
+        except asyncio.CancelledError:
+            self.cancel_read()
+            raise
 
     async def read_until_async(
             self,
             expected: bytes = serial.LF,
             size: Optional[int] = None) -> bytes:
-        return await self.loop.run_in_executor(
-            self._read_executor, self.read_until, expected, size)
+        try:
+            return await self.loop.run_in_executor(
+                self._read_executor, self.read_until, expected, size)
+        except asyncio.CancelledError:
+            self.cancel_read()
+            raise
 
     async def readinto_async(self, b: Union[array.array, bytearray]):
-        return await self.loop.run_in_executor(
-            self._read_executor, self.readinto, b)
+        try:
+            return await self.loop.run_in_executor(
+                self._read_executor, self.readinto, b)
+        except asyncio.CancelledError:
+            self.cancel_read()
+            raise
 
     async def readline_async(self, size: int = -1) -> bytes:
-        return await self.loop.run_in_executor(
-            self._read_executor, self.readline, size)
+        try:
+            return await self.loop.run_in_executor(
+                self._read_executor, self.readline, size)
+        except asyncio.CancelledError:
+            self.cancel_read()
+            raise
 
     async def readlines_async(self, hint: int = -1) -> List[bytes]:
-        return await self.loop.run_in_executor(
-            self._read_executor, self.readlines, hint)
+        try:
+            return await self.loop.run_in_executor(
+                self._read_executor, self.readlines, hint)
+        except asyncio.CancelledError:
+            self.cancel_read()
+            raise
 
     async def write_async(
             self, data: Union[bytearray, bytes, memoryview]) -> int:
-        return await self.loop.run_in_executor(
-            self._write_executor, self.write, data)
+        try:
+            return await self.loop.run_in_executor(
+                self._write_executor, self.write, data)
+        except asyncio.CancelledError:
+            self.cancel_write()
+            raise
 
     async def writelines_async(
             self, lines: List[Union[bytearray, bytes, memoryview]]) -> int:
-        return await self.loop.run_in_executor(
-            self._write_executor, self.writelines, lines)
+        try:
+            return await self.loop.run_in_executor(
+                self._write_executor, self.writelines, lines)
+        except asyncio.CancelledError:
+            self.cancel_write()
+            raise
