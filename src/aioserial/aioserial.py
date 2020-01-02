@@ -22,14 +22,14 @@ class AioSerial(serial.Serial):
             bytesize: int = serial.EIGHTBITS,
             parity: str = serial.PARITY_NONE,
             stopbits: Union[float, int] = serial.STOPBITS_ONE,
-            timeout: Optional[float, int] = None,
+            timeout: Optional[Union[float, int]] = None,
             xonxoff: bool = False,
             rtscts: bool = False,
-            write_timeout: Optional[float, int] = None,
+            write_timeout: Optional[Union[float, int]] = None,
             dsrdtr: bool = False,
-            inter_byte_timeout: Optional[float, int] = None,
+            inter_byte_timeout: Optional[Union[float, int]] = None,
             exclusive: Optional[bool] = None,
-            cancel_timeout: Optional[float, int] = None,
+            cancel_timeout: Optional[Union[float, int]] = None,
             loop: Optional[asyncio.AbstractEventLoop] = None,
             **kwargs):
         super().__init__(
