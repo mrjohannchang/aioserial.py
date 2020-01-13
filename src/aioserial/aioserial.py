@@ -68,10 +68,10 @@ class AioSerial(serial.Serial):
         self._loop = value
 
     async def _cancel_read_async(self):
-        if not hasattr(self, 'cancel_read'):
+        if hasattr(self, 'cancel_read'):
             await asyncio.wait_for(
                 self.loop.run_in_executor(
-                    self._cancel_write_executor, self.cancel_read),
+                    self._cancel_read_executor, self.cancel_read),
                 timeout=self.cancel_timeout)
 
     async def read_async(self, size: int = 1) -> bytes:
