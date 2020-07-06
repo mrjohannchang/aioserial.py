@@ -97,6 +97,15 @@ class AioSerial(serial.Serial):
                 await asyncio.shield(self._cancel_read_async())
                 raise
 
+    async def read_all_async(self) -> bytes:
+        async with self._read_lock:
+            try:
+                return await self.loop.run_in_executor(
+                    self._read_executor, self.read_all)
+            except asyncio.CancelledError:
+                await asyncio.shield(self._cancel_read_async())
+                raise
+
     async def read_until_async(
             self,
             expected: bytes = serial.LF,

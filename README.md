@@ -72,6 +72,13 @@ bytes_read: bytes = \
     await aioserial_instance.read_async(size: int = 1)
 ```
 
+##### read_all_async
+
+```py
+bytes_read: bytes = \
+    await aioserial_instance.read_all_async()
+```
+
 ##### read_until_async
 
 ```py
