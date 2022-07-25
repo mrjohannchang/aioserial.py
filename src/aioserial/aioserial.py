@@ -58,7 +58,7 @@ class AioSerial(serial.Serial):
 
     @loop.setter
     def loop(self, value: Optional[asyncio.AbstractEventLoop]):
-        self.loop = value
+        self._loop = value
 
     async def read_async(self, size: int = 1) -> bytes:
         return await self.loop.run_in_executor(
