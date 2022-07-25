@@ -16,7 +16,7 @@
     + [Other APIs](#other-apis)
 * [Why aioserial?](#why-aioserial-)
 
-A Python package that combines [asyncio](https://docs.python.org/3/library/asyncio.html) and [pySerial](https://github.com/pyserial/pyserial).
+A Python package that combines [asyncio](https://docs.python.org/3/library/asyncio.html) and [pySerial](https://pypi.org/project/pyserial/).
 
 ## Quick start
 
@@ -57,7 +57,9 @@ True
 ```py
 aioserial_instance: aioserial.AioSerial = aioserial.AioSerial(
     # ... same with what can be passed to serial.Serial ...,
-    loop: Optional[asyncio.AbstractEventLoop] = None)
+    loop: Optional[asyncio.AbstractEventLoop] = None,
+    cancel_read_timeout: int = 1,
+    cancel_write_timeout: int = 1)
 ```
 
 #### Methods
@@ -115,10 +117,11 @@ number_of_byte_like_data_in_the_given_list_written: int = \
 
 ### Other APIs
 
-All the other APIs in package [pySerial](https://github.com/pyserial/pyserial) are supported in [aioserial](https://github.com/changyuheng/aioserial) as [original](https://pyserial.readthedocs.io/).
+All the other APIs in the mother package [pySerial](https://pypi.org/project/pyserial/) are supported in aioserial as-is.
 
 ## Why aioserial?
 
 * Want to use an asyncio-based but not a (self-built) thread-based serial library.
-* [pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio) does [not support Windows](https://github.com/pyserial/pyserial-asyncio/issues/3).
-* APIs in all the other packages ([pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio), [asyncserial](https://github.com/xvzf/asyncserial-py)) that target the same goal are not designed in high level.
+* [pySerial-asyncio](https://pypi.org/project/pyserial-asyncio/) does [not support Windows](https://github.com/pyserial/pyserial-asyncio/issues/3).
+* APIs in all the other packages ([pySerial-asyncio](https://pypi.org/project/pyserial-asyncio/),
+    [asyncserial](https://pypi.org/project/asyncserial/)) that target the same goal are not designed in high level.
