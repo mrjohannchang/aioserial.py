@@ -93,8 +93,8 @@ number_of_byte_like_data_in_the_given_list_written: int = \
 
 All the other APIs in package [pySerial](https://github.com/pyserial/pyserial) are supported in [aioserial](https://github.com/changyuheng/aioserial) as [original](https://pyserial.readthedocs.io/).
 
-## Why aioserial
+## Why aioserial?
 
-* Want to use an asyncio-based but not (self-built) thread-based serial library.
-* [pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio) doesn't support Windows.
+* Want to use an asyncio-based but not a (self-built) thread-based serial library.
+* [pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio) does not support Windows.
 * APIs in all the packages ([pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio), [asyncserial](https://github.com/xvzf/asyncserial-py)) that target the same goal are not designed in high level. You don't want to learn new APIs if you are already familiar with [pySerial](https://github.com/pyserial/pyserial).
