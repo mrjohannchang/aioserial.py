@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "aioserial"
-version = "1.3.0"
+version = "1.3.1"
 description = "An asynchronous serial port library of Python"
-authors = ["Henry Chang <mr.changyuheng@gmail.com>"]
+authors = ["Johann Chang <mr.changyuheng@gmail.com>"]
 license = "MPL-2.0"
 readme = "README.md"
-homepage = "https://github.com/changyuheng/aioserial"
+homepage = "https://github.com/changyuheng/aioserial.py"
 packages = [
     {include = "aioserial", from = "packages"},
 ]
