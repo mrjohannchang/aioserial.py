@@ -16,7 +16,7 @@ Constructor
 
     aioserial_instance: aioserial.AioSerial = aioserial.AioSerial(
         SAME_WITH_PYSERIAL...,
-        loop=None)
+        loop: Optional[asyncio.AbstractEventLoop] = None)
 
 Asynchronously Read
 -------------------
@@ -84,3 +84,8 @@ writelines_async
 
     number_of_byte_like_data_in_the_given_list_written: int = \
         await aioserial_instance.writelines_async(list_of_bytes_like_data)
+
+Other APIs
+----------
+
+All the other APIs in `serial.Serial` are supported as original.
