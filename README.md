@@ -2,6 +2,7 @@
 
 * [Quick start](#quick-start)
     + [A simple serial port reader](#a-simple-serial-port-reader)
+    + [pyserial-asyncio example replacement](#pyserial-asyncio-example-replacement)
 * [API](#api)
     + [AioSerial](#aioserial)
         - [Constructor](#constructor)
@@ -23,8 +24,9 @@ A Python package that combines [asyncio](https://docs.python.org/3/library/async
 ### A simple serial port reader
 
 ```py
-import aioserial
 import asyncio
+
+import aioserial
 
 
 async def read_and_print(aioserial_instance: aioserial.AioSerial):
@@ -32,6 +34,67 @@ async def read_and_print(aioserial_instance: aioserial.AioSerial):
         print((await aioserial_instance.read_async()).decode(errors='ignore'), end='', flush=True)
 
 asyncio.run(read_and_print(aioserial.AioSerial(port='COM1')))
+```
+
+### pyserial-asyncio example replacement
+
+**The example usage from pyserial-asyncio**
+
+https://pyserial-asyncio.readthedocs.io/en/latest/shortintro.html
+
+```py
+import asyncio
+import serial_asyncio
+
+class Output(asyncio.Protocol):
+    def connection_made(self, transport):
+        self.transport = transport
+        print('port opened', transport)
+        transport.serial.rts = False  # You can manipulate Serial object via transport
+        transport.write(b'Hello, World!\n')  # Write serial data via transport
+
+    def data_received(self, data):
+        print('data received', repr(data))
+        if b'\n' in data:
+            self.transport.close()
+
+    def connection_lost(self, exc):
+        print('port closed')
+        self.transport.loop.stop()
+
+    def pause_writing(self):
+        print('pause writing')
+        print(self.transport.get_write_buffer_size())
+
+    def resume_writing(self):
+        print(self.transport.get_write_buffer_size())
+        print('resume writing')
+
+loop = asyncio.get_event_loop()
+coro = serial_asyncio.create_serial_connection(loop, Output, '/dev/ttyUSB0', baudrate=115200)
+loop.run_until_complete(coro)
+loop.run_forever()
+loop.close()
+```
+
+**aioserial equivalence**
+
+```py
+import asyncio
+
+import aioserial
+
+
+async def read_and_print(aioserial_instance: aioserial.AioSerial):
+    while True:
+        data: bytes = await aioserial_instance.read_async()
+        print(data.decode(errors='ignore'), end='', flush=True)
+        if b'\n' in data:
+            aioserial_instance.close()
+            break
+
+aioserial_instance: aioserial.AioSerial = aioserial.AioSerial(port='/dev/ttyUSB0', baudrate=115200)
+asyncio.run(asyncio.gather(read_and_print(aioserial_instance), aioserial_instance.write_async(b'Hello, World!\n')))
 ```
 
 ## API
