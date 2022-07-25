@@ -46,7 +46,6 @@ class AioSerial(serial.Serial):
 
     @property
     def loop(self) -> Optional[asyncio.AbstractEventLoop]:
-        self.write(b'')
         return self._loop if self._loop else asyncio.get_running_loop()
 
     @loop.setter
