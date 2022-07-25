@@ -4,10 +4,10 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-import sys
 import array
 import asyncio
 import concurrent.futures
+import sys
 from typing import List, Optional, Union
 
 import serial
@@ -45,13 +45,6 @@ class AioSerial(serial.Serial):
             inter_byte_timeout=inter_byte_timeout,
             exclusive=exclusive,
             **kwargs)
-
-        if not loop and sys.version_info < (3,7):
-            # If Python version < 3.7, loop is not optional because there is no
-            #asyncio.get_running_loop() to be used latter.
-            raise TypeError("{} missing 1 required argument: 'loop'".format(
-                self.__class__.__name__))
-
         self._loop: Optional[asyncio.AbstractEventLoop] = loop
         self._read_executor = \
             concurrent.futures.ThreadPoolExecutor(max_workers=1)
@@ -60,7 +53,8 @@ class AioSerial(serial.Serial):
 
     @property
     def loop(self) -> Optional[asyncio.AbstractEventLoop]:
-        return self._loop if self._loop else asyncio.get_running_loop()
+        return self._loop if self._loop else asyncio.get_running_loop() \
+                if sys.version_info > (3, 6) else asyncio.get_event_loop()
 
     @loop.setter
     def loop(self, value: Optional[asyncio.AbstractEventLoop]):
