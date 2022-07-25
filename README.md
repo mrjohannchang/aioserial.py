@@ -113,4 +113,4 @@ All the other APIs in package [pySerial](https://github.com/pyserial/pyserial) a
 
 * Want to use an asyncio-based but not a (self-built) thread-based serial library.
 * [pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio) does [not support Windows](https://github.com/pyserial/pyserial-asyncio/issues/3).
-* APIs in all the packages ([pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio), [asyncserial](https://github.com/xvzf/asyncserial-py)) that target the same goal are not designed in high level.
+* APIs in all the other packages ([pySerial-asyncio](https://github.com/pyserial/pyserial-asyncio), [asyncserial](https://github.com/xvzf/asyncserial-py)) that target the same goal are not designed in high level.
