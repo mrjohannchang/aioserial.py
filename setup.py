@@ -14,7 +14,7 @@ here: str = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the README file
 f: io.TextIOWrapper
-with open(os.path.join(here, 'README.rst'), encoding='utf-8') as f:
+with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setuptools.setup(
@@ -27,6 +27,7 @@ setuptools.setup(
 
     description='An asynchronous serial port library of Python',
     long_description=long_description,
+    long_description_content_type='text/markdown',
 
     # The project's main homepage.
     url='https://github.com/changyuheng/aioserial',
@@ -35,8 +36,8 @@ setuptools.setup(
     author='Henry Chang',
     author_email='mr.changyuheng@gmail.com',
 
-    #  # Choose your license
-    #  license='MIT',
+    # Choose your license
+    license='MIT',
 
     # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
