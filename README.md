@@ -20,17 +20,6 @@ asyncio.run(read_and_print(aioserial.AioSerial(port='COM1')))
 
 ## API
 
-### aioserial vs. pySerial
-
-```py
->>> import aioserial
->>> import serial
-
->>> aioserial.Serial is serial.Serial
-True
-```
-
-
 ### AioSerial
 
 ```py
@@ -41,6 +30,9 @@ True
 True
 
 >>> issubclass(aioserial.AioSerial, serial.Serial)
+True
+
+>>> aioserial.Serial is serial.Serial
 True
 ```
 
