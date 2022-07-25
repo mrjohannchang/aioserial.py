@@ -22,13 +22,14 @@ class AioSerial(serial.Serial):
             bytesize: int = serial.EIGHTBITS,
             parity: str = serial.PARITY_NONE,
             stopbits: Union[float, int] = serial.STOPBITS_ONE,
-            timeout: Optional[float] = None,
+            timeout: Optional[float, int] = None,
             xonxoff: bool = False,
             rtscts: bool = False,
-            write_timeout: Optional[float] = None,
+            write_timeout: Optional[float, int] = None,
             dsrdtr: bool = False,
-            inter_byte_timeout: Optional[float] = None,
+            inter_byte_timeout: Optional[float, int] = None,
             exclusive: Optional[bool] = None,
+            cancel_timeout: Optional[float, int] = None,
             loop: Optional[asyncio.AbstractEventLoop] = None,
             **kwargs):
         super().__init__(
@@ -45,10 +46,16 @@ class AioSerial(serial.Serial):
             inter_byte_timeout=inter_byte_timeout,
             exclusive=exclusive,
             **kwargs)
+        self.cancel_timeout: Union[float, int] = \
+            1 if cancel_timeout is None else cancel_timeout
         self._loop: Optional[asyncio.AbstractEventLoop] = loop
-        self._read_executor = \
+        self._read_executor: concurrent.futures.ThreadPoolExecutor = \
             concurrent.futures.ThreadPoolExecutor(max_workers=1)
-        self._write_executor = \
+        self._cancel_read_executor: concurrent.futures.ThreadPoolExecutor = \
+            concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        self._write_executor: concurrent.futures.ThreadPoolExecutor = \
+            concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        self._cancel_write_executor: concurrent.futures.ThreadPoolExecutor = \
             concurrent.futures.ThreadPoolExecutor(max_workers=1)
 
     @property
@@ -60,12 +67,19 @@ class AioSerial(serial.Serial):
     def loop(self, value: Optional[asyncio.AbstractEventLoop]):
         self._loop = value
 
+    async def _cancel_read_async(self):
+        if not hasattr(self, 'cancel_read'):
+            await asyncio.wait_for(
+                self.loop.run_in_executor(
+                    self._cancel_write_executor, self.cancel_read),
+                timeout=self.cancel_timeout)
+
     async def read_async(self, size: int = 1) -> bytes:
         try:
             return await self.loop.run_in_executor(
                 self._read_executor, self.read, size)
         except asyncio.CancelledError:
-            self.cancel_read()
+            await self._cancel_read_async()
             raise
 
     async def read_until_async(
@@ -76,7 +90,7 @@ class AioSerial(serial.Serial):
             return await self.loop.run_in_executor(
                 self._read_executor, self.read_until, expected, size)
         except asyncio.CancelledError:
-            self.cancel_read()
+            await self._cancel_read_async()
             raise
 
     async def readinto_async(self, b: Union[array.array, bytearray]):
@@ -84,7 +98,7 @@ class AioSerial(serial.Serial):
             return await self.loop.run_in_executor(
                 self._read_executor, self.readinto, b)
         except asyncio.CancelledError:
-            self.cancel_read()
+            await self._cancel_read_async()
             raise
 
     async def readline_async(self, size: int = -1) -> bytes:
@@ -92,7 +106,7 @@ class AioSerial(serial.Serial):
             return await self.loop.run_in_executor(
                 self._read_executor, self.readline, size)
         except asyncio.CancelledError:
-            self.cancel_read()
+            await self._cancel_read_async()
             raise
 
     async def readlines_async(self, hint: int = -1) -> List[bytes]:
@@ -100,8 +114,15 @@ class AioSerial(serial.Serial):
             return await self.loop.run_in_executor(
                 self._read_executor, self.readlines, hint)
         except asyncio.CancelledError:
-            self.cancel_read()
+            await self._cancel_read_async()
             raise
+
+    async def _cancel_write_async(self):
+        if hasattr(self, 'cancel_write'):
+            await asyncio.wait_for(
+                self.loop.run_in_executor(
+                    self._cancel_write_executor, self.cancel_write),
+                timeout=self.cancel_timeout)
 
     async def write_async(
             self, data: Union[bytearray, bytes, memoryview]) -> int:
@@ -109,14 +130,14 @@ class AioSerial(serial.Serial):
             return await self.loop.run_in_executor(
                 self._write_executor, self.write, data)
         except asyncio.CancelledError:
-            self.cancel_write()
+            await self._cancel_write_async()
             raise
 
     async def writelines_async(
-            self, lines: List[Union[bytearray, bytes, memoryview]]) -> int:
+            self, lines: List[Union[bytearray, bytes, memoryview]]):
         try:
             return await self.loop.run_in_executor(
                 self._write_executor, self.writelines, lines)
         except asyncio.CancelledError:
-            self.cancel_write()
+            await self._cancel_write_async()
             raise
