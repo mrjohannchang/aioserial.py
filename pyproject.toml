@@ -6,6 +6,9 @@ authors = ["Henry Chang <mr.changyuheng@gmail.com>"]
 license = "MPL-2.0"
 readme = "README.md"
 homepage = "https://github.com/changyuheng/aioserial"
+packages = [
+    {include = "aioserial", from = "packages"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"
