@@ -1,5 +1,21 @@
 # aioserial
 
+* [Quick start](#quick-start)
+    + [A simple serial port reader](#a-simple-serial-port-reader)
+* [API](#api)
+    + [AioSerial](#aioserial)
+        - [Constructor](#constructor)
+        - [Methods](#methods)
+            * [read_async](#read-async)
+            * [read_until_async](#read-until-async)
+            * [readinto_async](#readinto-async)
+            * [readline_async](#readline-async)
+            * [readlines_async](#readlines-async)
+            * [write_async](#write-async)
+            * [writelines_async](#writelines-async)
+    + [Other APIs](#other-apis)
+* [Why aioserial?](#why-aioserial-)
+
 A Python package that combines [asyncio](https://docs.python.org/3/library/asyncio.html) and [pySerial](https://github.com/pyserial/pyserial).
 
 ## Quick start
